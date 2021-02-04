@@ -1,2 +1,2 @@
 # mobims_analysis
-Analysis for electron impact spectrometry data using Julia.
+Analysis for electron impact mass spectrometry data using Julia.
