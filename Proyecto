@@ -1,0 +1,46 @@
+#got to julias directory
+cd("/Users/rtlortega/Julia/")
+#Load packages
+using DataFrames
+using CSV
+using Statistics
+
+#load dataframe
+data = CSV.read("20190620 171928 SEM Scan Stair Cafe molido 15min15min20min.asc", DataFrame; delim='\t')
+
+###
+# Read absolute start time as string
+
+
+# Read data ion data
+rga = CSV.read("20190620 171928 SEM Scan Stair Cafe molido 15min15min20min.asc", DataFrame; skipto=8, delim="\t")
+n=ncol(rga)/3
+z = collect(1:n)*3
+z= Int.(z)
+Ions = rga[2:25,z]
+
+#Change col names
+#Put the names in a vector
+y= []
+for j in 1:length(z)
+    x=("Ion $j")
+    push!(y, x)
+end
+#Change in the data frame
+rename!(Ions, Symbol.(y))
+
+
+#Relative Time (s)
+rtime = rga[2:25,2]
+rtime= parse.(Float64, rtime)
+start = rtime[1]
+
+#Get the relative time
+vector = []
+for i in rtime,
+    i=i/3600 + start
+    push!(vector, i)
+end
+
+#Put the relative time with the Ion data base
+insertcols!(Ions, 1, :RelativeTime => vector)
