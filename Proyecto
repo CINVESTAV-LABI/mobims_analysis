@@ -1,4 +1,5 @@
-#got to julias directory
+#Main code
+#go to julias directory
 cd("/Users/rtlortega/Julia/")
 #Load packages
 using DataFrames
