@@ -1,2 +1,2 @@
 # mobims_analysis
-Un repositorio para análisis de datos de espectrometría de gases utilizando Julia.
+Analysis for electron impact spectrometry data using Julia.
