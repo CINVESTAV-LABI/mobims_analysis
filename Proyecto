@@ -1,20 +1,17 @@
 #Main code
 #go to julias directory
-cd("/Users/rtlortega/Julia/")
+cd("/Users/rtlortega/Documents/Maestria/RW/Proyecto_Codigo/Git_Control")
 #Load packages
 using DataFrames
 using CSV
 using Statistics
 
 #load dataframe
-data = CSV.read("20190620 171928 SEM Scan Stair Cafe molido 15min15min20min.asc", DataFrame; delim='\t')
-
-###
-# Read absolute start time as string
+data = CSV.read('/data/gemahlener-cafe.asc', DataFrame; delim='\t')
 
 
 # Read data ion data
-rga = CSV.read("20190620 171928 SEM Scan Stair Cafe molido 15min15min20min.asc", DataFrame; skipto=8, delim="\t")
+rga = CSV.read("./data/gemahlener-cafe.asc", DataFrame; skipto=9, delim="\t")
 n=ncol(rga)/3
 z = collect(1:n)*3
 z= Int.(z)
