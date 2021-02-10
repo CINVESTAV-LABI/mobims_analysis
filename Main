@@ -1,44 +1,55 @@
-#Main code
-#go to julias directory
-cd("/Users/rtlortega/Documents/Maestria/RW/Proyecto_Codigo/Git_Control")
-#Load packages
+#Main: 08/02/2021
+#This code was develop to analyze electron for electron impact mass spectrometry data
+#Coded by Laura Rosina Torres Ortega
+#From LABI, Laboratory of Mass Espectrometry, CINVESTAV, January 2021.
+#Packages required: Pkg.add("Plots"), Pkg.add("DataFrames"), Pkg.add("Statistics"), Pkg.add("CSV")
+#using StatsPlots
+#################Load packages needed#####################################
 using DataFrames
 using CSV
 using Statistics
+using Plots
+using StatsPlots
 
-#load dataframe
-data = CSV.read('/data/gemahlener-cafe.asc', DataFrame; delim='\t')
 
 
-# Read data ion data
-rga = CSV.read("./data/gemahlener-cafe.asc", DataFrame; skipto=9, delim="\t")
-n=ncol(rga)/3
+#Set working directory
+cd("/Users/rtlortega/Documents/Maestria/RW/Proyecto_Codigo/Git_Control/.")
+
+#Load data frame from .asc format
+data = CSV.read("data/gemahlener-cafe.asc", DataFrame; skipto=9, delim="\t", missingstring="?",
+                threaded=false, silencewarnings=true)
+
+#Filtrate only ion info
+n=ncol(data)/3
 z = collect(1:n)*3
 z= Int.(z)
-Ions = rga[2:25,z]
+ions = data[2:24,z]
 
 #Change col names
-#Put the names in a vector
+#Put the ion names in a vector
 y= []
 for j in 1:length(z)
     x=("Ion $j")
     push!(y, x)
 end
-#Change in the data frame
-rename!(Ions, Symbol.(y))
+#Rename cols in the data frame
+rename!(ions, Symbol.(y))
 
 
-#Relative Time (s)
-rtime = rga[2:25,2]
-rtime= parse.(Float64, rtime)
+#Isonate Relative Time Column (s)
+rtime = data[2:24,2]
 start = rtime[1]
 
-#Get the relative time
+#Get the relative time in seconds
 vector = []
 for i in rtime,
     i=i/3600 + start
     push!(vector, i)
 end
 
-#Put the relative time with the Ion data base
-insertcols!(Ions, 1, :RelativeTime => vector)
+#Put the relative time with the ion data info in a single table to analyze
+insertcols!(ions, 1, :RelativeTime => vector)
+#Fileted cols done
+
+###############Plotting########################
