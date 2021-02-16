@@ -11,10 +11,8 @@ using Statistics
 using Plots
 using StatsPlots
 
-
-
 #Set working directory
-#cd("/Users/rtlortega/Documents/Maestria/RW/Proyecto_Codigo/Git_Control/.")
+cd("/Users/rtlortega/Documents/Maestria/RW/Proyecto_Codigo/Git_Control/.")
 
 #Load data frame from .asc format
 data = CSV.read("data/gemahlener-cafe.asc", DataFrame; skipto=9, delim="\t", missingstring="?",
@@ -30,7 +28,7 @@ ions = data[2:24,z]
 #Put the ion names in a vector
 y= []
 for j in 1:length(z)
-    x=("Ion_$j")
+    x=("Ion_$j m/z")
     push!(y, x)
 end
 #Rename cols in the data frame
@@ -42,17 +40,21 @@ rtime = data[2:24,2]
 start = rtime[1]
 
 #Get the relative time in seconds
-vector = []
+time_vector = []
 for i in rtime,
     i=i/3600 + start
-    push!(vector, i)
+    push!(time_vector, i)
 end
 
 #Put the relative time with the ion data info in a single table to analyze
-insertcols!(ions, 1, :RelativeTime => vector)
-display(ions)
-#Fileted cols done
+insertcols!(ions, 1, :RelativeTime => time_vector)
 
 ###############Plotting########################
-#Plot en conjunto
-@df ions display(plot(:RelativeTime, cols(2:296), label = names(ions)[2:296]))
+
+#Plotting each ion behavior
+for m in 1:3;
+ display(plot(time_vector, ions[:, m+1], title="Dinámica Ion$m", lw=3,  label = "Ion $m"))
+ xlabel!("Tiempo en (s)")
+ ylabel!("Ion Current [A]")
+ savefig("Dinamics Ion$m.png")
+end
