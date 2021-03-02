@@ -58,7 +58,7 @@ insertcols!(ions, 1, :RelativeTime => time_vector)
 
 #Plotting each ion behavior
 no_ions = ncol(ions) - 1
-for m in 1:no_ions;
+for m in 1:no_ions
     plot(time_vector, ions[:, m+1], title="Dinamics of Ion $m", lw=3,  label = "Ion $m")
     xlabel!("Time (s)")
     ylabel!("Ion Current [A]")
