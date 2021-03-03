@@ -16,7 +16,7 @@ using StatsPlots
 ##################     Import DATASET       #########################################
 #########################################################################
 
-#Que te jale el archivo en donde estás
+#Read the data  
 
 data_dir = joinpath(@__DIR__, "data")
 data = CSV.read(joinpath(data_dir, "gemahlener-cafe.asc"), DataFrame;
@@ -59,7 +59,6 @@ insertcols!(ions, 1, :RelativeTime => time_vector)
 #Plotting each ion behavior
 no_ions = ncol(ions) - 1
 for m in 1:no_ions
-    plot(time_vector, ions[:, m+1], title="Dinamics of Ion $m", lw=3,  label = "Ion $m")
     xlabel!("Time (s)")
     ylabel!("Ion Current [A]")
     savefig("images/Plot$m.pdf")
