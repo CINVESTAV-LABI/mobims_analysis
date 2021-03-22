@@ -70,19 +70,17 @@ end
 
 ############################
 function f(time,resp,p)
-    # Función "mov.avg"
-    # Calcula el promedio móvil simple de "resp" utilizando un
-    # periodo "p"
-    n = length(resp) # Número de elementos de "resp"
-    movavg = () # Vector vacio (contendrá el  promedio móvil)
-    timrep = () # Vector vacio (contendrá el tiempo representado)
-    a = 1 # Valor inicial de primer elemento a tomar en cuenta
+    # Moving average of  "resp" using "p"
+    # as the window
+    n = length(resp) # Number of elements of "resp"
+    movavg = () # it will contain moving average
+    timrep = () # will contain the time
+    a = 1 # Inicial value
     while((a+p) <= n)
-      # en tanto i sea menor o igual a n has lo siguiente:
       movamg = (movavg, mean(resp[i:(a+p-1)]))
       timrep = (timrep, median(time[a:(a+p-1)]))
-      a = a + 1 # Incrementa el valor de i
-    # Formatea el resultado como un data.frame y lo "saca"
+      a = a + 1 # increments value of a
+    # the result is a dataframe structure
     print(dataframe(time=timrep, ma=movavg))
     end
 end
