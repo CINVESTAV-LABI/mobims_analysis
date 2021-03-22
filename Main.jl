@@ -16,7 +16,7 @@ using StatsPlots
 ##################     Import DATASET       #########################################
 #########################################################################
 
-#Read the data  
+#Read the data
 
 data_dir = joinpath(@__DIR__, "data")
 data = CSV.read(joinpath(data_dir, "gemahlener-cafe.asc"), DataFrame;
@@ -55,11 +55,34 @@ end
 insertcols!(ions, 1, :RelativeTime => time_vector)
 
 ###############Plotting########################
-
+mkdir("images")
 #Plotting each ion behavior
 no_ions = ncol(ions) - 1
-for m in 1:no_ions
-    xlabel!("Time (s)")
-    ylabel!("Ion Current [A]")
-    savefig("images/Plot$m.pdf")
+for m in 1:10;
+        plot(time_vector,ions[:, m+1], label="Ion $m")
+        xlabel!("Time (s)")
+        ylabel!("Ion Current [A]")
+        savefig("images/Plot$m.pdf")
+end
+
+#sma(arr, n)
+
+
+############################
+function f(time,resp,p)
+    # Función "mov.avg"
+    # Calcula el promedio móvil simple de "resp" utilizando un
+    # periodo "p"
+    n = length(resp) # Número de elementos de "resp"
+    movavg = () # Vector vacio (contendrá el  promedio móvil)
+    timrep = () # Vector vacio (contendrá el tiempo representado)
+    a = 1 # Valor inicial de primer elemento a tomar en cuenta
+    while((a+p) <= n)
+      # en tanto i sea menor o igual a n has lo siguiente:
+      movamg = (movavg, mean(resp[i:(a+p-1)]))
+      timrep = (timrep, median(time[a:(a+p-1)]))
+      a = a + 1 # Incrementa el valor de i
+    # Formatea el resultado como un data.frame y lo "saca"
+    print(dataframe(time=timrep, ma=movavg))
+    end
 end
