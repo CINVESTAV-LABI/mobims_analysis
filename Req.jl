@@ -40,15 +40,11 @@ catch
 end
 
 
-#   StatsPlots
+#   Statistics
 try
-    @eval import StatsPlots
-    println("StatsPlots is installed")
+    @eval import Statistics
+    println("Statistics is installed")
 catch
-    println("StatsPlots is not installed")
-    Pkg.add("StatsPlots")
+    println("Statistics is not installed")
+    Pkg.add("Statistics")
 end
-
-
-
- #Pkg.update()
