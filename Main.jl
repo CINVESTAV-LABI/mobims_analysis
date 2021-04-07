@@ -55,7 +55,9 @@ end
 #Put the relative time with the ion data info in a single table to analyze
 insertcols!(ions, 1, :RelativeTime => time_vector)
 
-###############Plotting########################
+#########################################################################
+##################     Plot graphs      #########################################
+#########################################################################
 #First make "images" folder if its not already in your dir
 folder=isdir("images")
 if (folder==true)
@@ -73,13 +75,15 @@ for m in 1:10;
         savefig("images/Plot$m.pdf")
 end
 
-############################
+#########################################################################
+##################     Moving average      #########################################
+#########################################################################
 function f(time,resp,p)
     # Moving average of  "resp" using "p"
     # as the window
     n = length(resp) # Number of elements of "resp"
-    movavg = []#Array{Float64,1}(undef, n)]]# it will contain moving average
-    timrep = []#Array{Float64,1}(undef, n)  # will contain the time
+    movavg = [] # it will contain moving average
+    timrep = [] # will contain the time
     a = 1 # Inicial value
     while((a+p) <= n)
       movavg = [movavg; mean(resp[a:(a+p-1)])]
@@ -87,10 +91,9 @@ function f(time,resp,p)
       a = a + 1 # increments value of a # the result is a dataframe structure
     end
 return DataFrame(time=timrep, ma=movavg)
-
 end
 
-Ion_10 = f(ions[:,"RelativeTime"], ions[:,"Ion_10 m/z"], 2)
+Ion_10 = f(ions[:,"RelativeTime"], ions[:,"Ion_10 m/z"], 3)
 
 #Smooting function vs real behavior
 p10_b=plot(ions[:,"RelativeTime"],  ions[:,"Ion_10 m/z"], xlab="Time (h)",
@@ -98,18 +101,28 @@ p10_b=plot(ions[:,"RelativeTime"],  ions[:,"Ion_10 m/z"], xlab="Time (h)",
 #points(Ion_10[:,"time"],Ion_10[:,"ma"])
 p10_s= scatter(Ion_10[:,"time"],Ion_10[:,"ma"], xlab="Time (h)",
     ylab="Ion Current (A)", label="Smoothing, with p= 2, Ion 10") # Make a scatter plot
-plot(p1, p2, layout = (2, 1), legend = false, label="Smoothing, with p= 2, Ion 10")
+plot(p10_b, p10_s, layout = (2, 1), legend = false, label="Smoothing, with p= 2, Ion 10")
+
+#########################################################################
+##################     Correlations      #########################################
+#########################################################################
+for z in 1:10;
+    print(cor(ions[:,"RelativeTime"], ions[:,"Ion_$z m/z"]))
+end
+
+#########################################################################
+##################     Frequencies       #########################################
+#########################################################################
+for k in 1:5;
+    display(histogram(ions[:,"Ion_$k m/z"], line=(3,0.2,:green), fillcolor=[:red :black], fillalpha=0.2, label="Ion $k"))
+end
 
 
-###########Update 23_03_21
-
-#describe(ions)
-
-
+#########################################################################
+##################     General Statistics      #########################################
+#########################################################################
 ##########
-#using DynamicalSystems
-#h_eom(x,p,t) = SVector{2}()
-
-
-#ContinuousDynamicalSystem(eom, state, p [, jacobian [, J0]]; t0 = 0.0)
-#DifferentialEquations.jl
+describe(ions)
+# return the autocorrelation of ion 10
+StatsBase.autocor(ions[:,"Ion_10 m/z"])
+StatsBase.autocor(ions[:,"Ion_200 m/z"])

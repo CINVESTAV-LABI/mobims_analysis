@@ -48,3 +48,34 @@ catch
     println("Statistics is not installed")
     Pkg.add("Statistics")
 end
+
+#Central statistics
+# StatsBase.jl
+try
+    @eval import StatsBase
+    println("StatsBase is installed")
+catch
+    println("StatsBase is not installed")
+    Pkg.add("StatsBase")
+end
+
+
+# DynamicalSystems.jl
+try
+    @eval import DynamicalSystems
+    println("DynamicalSystems is installed")
+catch
+    println("DynamicalSystems is not installed")
+    Pkg.add("DynamicalSystems")
+end
+
+
+
+ # StatsBase.jl
+ try
+     @eval import StatsBase
+     println("StatsBase is installed")
+ catch
+     println("StatsBase is not installed")
+     Pkg.add("StatsBase")
+ end
