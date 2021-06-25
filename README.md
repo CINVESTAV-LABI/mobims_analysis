@@ -24,4 +24,4 @@ GNU General Public License, version 3, (<http://gplv3.fsf.org/>).
 
 # Contact
 
-<rosina.torres@cinvestav.mx>
+<laura.torres@cinvestav.mx>
